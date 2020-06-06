@@ -1,5 +1,7 @@
 # mproc
 
+![Rust](https://github.com/ddubson/mproc/workflows/Rust/badge.svg)
+
 ## Building pre-requisites
 
 - `glib`
