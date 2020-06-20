@@ -1,0 +1,6 @@
+# This is a sample yaml file used for development purposes only
+commands:
+  - name: Command1
+    run: ls -la
+  - name: Command2
+    run: echo hi

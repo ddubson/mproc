@@ -2,7 +2,15 @@
 
 ![Rust](https://github.com/ddubson/mproc/workflows/Rust/badge.svg)
 
-## Building pre-requisites
+mproc is a GUI-based GTK3 application written in Rust, and is aimed to help developers manage their processes while developing
+a project locally on their dev systems.
+
+The common use case is for a developer to use mproc to monitor the logging and health status of a 
+front-end application and a back-end application while working on a project.
+
+## Developing mproc
+
+### Building pre-requisites
 
 - `glib`
     - MacOS: `brew install glib` then `export PKG_CONFIG_PATH="/usr/local/opt/libffi/lib/pkgconfig"`
@@ -18,14 +26,14 @@
         - Update `Path` with `C:\msys64\mingw64\bin`
       - Add target `rustup target add x86_64-pc-windows-gnu`
 
-## Launch locally
+### Launch locally
 
 MacOS: `cargo run`
 
 Windows: `cargo run --target=x86_64-pc-windows-gnu`
 
 
-## Build binary
+### Build binary
 
 MacOS: `cargo build`
 
