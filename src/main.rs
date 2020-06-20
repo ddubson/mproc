@@ -1,11 +1,11 @@
-use std::env;
 use std::process::Command;
 use std::str;
 
 use gio::prelude::*;
 use glib::clone;
 use gtk::{Application, ApplicationWindow, ButtonBuilder, Orientation,
-          BoxBuilder, TextBuffer, TextView, TextBufferBuilder};
+          BoxBuilder, TextBuffer, TextView, TextBufferBuilder, ScrolledWindow,
+          ScrolledWindowBuilder};
 use gtk::prelude::*;
 
 //use yaml_rust::{YamlLoader, Yaml};
@@ -20,10 +20,16 @@ fn on_activate(application: &Application) {
     let text_buffer: TextBuffer = TextBufferBuilder::new()
         .build();
     let text_view: TextView = TextView::new_with_buffer(&text_buffer);
+    let scrolled_window: ScrolledWindow = ScrolledWindowBuilder::new()
+        .min_content_height(400)
+        .min_content_width(600)
+        .child(&text_view)
+        .build();
+
     let box_container = BoxBuilder::new()
         .orientation(Orientation::Vertical)
         .build();
-    box_container.add(&text_view);
+    box_container.add(&scrolled_window);
     box_container.add(&button);
 
     window.add(&box_container);
@@ -31,8 +37,13 @@ fn on_activate(application: &Application) {
     window.set_default_size(600, 800);
     window.show_all();
 
-    let output = Command::new("dotnet")
-        .arg("--help")
+    // Listen for text view changes, auto-scroll as text is added.
+    text_view.connect_size_allocate(clone!(@weak scrolled_window => move |_,_| {
+        let adj = scrolled_window.get_vadjustment().unwrap();
+        adj.set_value(adj.get_upper() - adj.get_page_size());
+    }));
+
+    let output = Command::new("lsof")
         .output()
         .expect("failed to execute process");
 
@@ -48,8 +59,8 @@ fn on_activate(application: &Application) {
 }
 
 fn main() {
-    let args: Vec<_> = env::args().collect::<Vec<_>>();
-    println!("{:?}", args);
+    //let args: Vec<_> = env::args().collect::<Vec<_>>();
+    //println!("{:?}", args);
 
     //TODO: check if arg is passed in
     // let contents = fs::read_to_string(&args[1])
