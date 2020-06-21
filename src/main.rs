@@ -1,8 +1,10 @@
+mod process_container;
+mod main_scene;
+
 use gtk::{Application};
 use gio::ApplicationExt;
 use gio::prelude::ApplicationExtManual;
 
-mod main_scene;
 
 fn main() {
     let app = Application::new(
