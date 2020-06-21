@@ -1,8 +1,7 @@
 use gtk::{Application, ApplicationWindow, ButtonBuilder,
           BoxBuilder, Orientation, WidgetExt, ButtonExt,
-          ContainerExt, GtkWindowExt, TextBufferExt};
+          ContainerExt, GtkWindowExt};
 use glib::clone;
-use std::process::Command;
 use crate::process_container::ProcessUIContainer;
 use crate::process_container;
 
@@ -15,7 +14,7 @@ struct WindowConfiguration {
 const STD_WINDOW_CONFIG: WindowConfiguration = WindowConfiguration {
     title: "mproc",
     height: 800,
-    width: 600,
+    width: 1200,
 };
 
 pub fn on_window_activate(app: &Application) {
@@ -38,18 +37,45 @@ pub fn on_window_activate(app: &Application) {
     window.set_default_size(STD_WINDOW_CONFIG.width, STD_WINDOW_CONFIG.height);
     window.show_all();
 
-    let output = Command::new("lsof")
-        .output()
-        .expect("failed to execute process");
+    machine_process::run_sample_process(process_container.text_buffer)
+}
 
-    match std::str::from_utf8(&output.stdout) {
-        Ok(x) => {
-            let text_buffer = process_container.text_buffer;
-            // Display the output of command in GUI
-            text_buffer.insert(&mut text_buffer.get_end_iter(), x);
+mod machine_process {
+    use std::process::{Command};
+    use gtk::{TextBuffer, TextBufferExt};
+
+    pub struct MachineProcess {
+        command: &'static str,
+    }
+
+    pub trait SpawnsProcess {
+        //FIXME output buffer should be generic, not tied to GTK
+        fn spawn(&self, output_buffer: TextBuffer);
+    }
+
+    impl SpawnsProcess for MachineProcess {
+        fn spawn(&self, output_buffer: TextBuffer) {
+            let output = Command::new(&self.command)
+                .output()
+                .expect("failed to execute process");
+
+            match std::str::from_utf8(&output.stdout) {
+                Ok(x) => {
+                    let text_buffer = output_buffer;
+                    // Display the output of command in GUI
+                    text_buffer.insert(&mut text_buffer.get_end_iter(), x);
+                }
+                _ => {
+                    println!("Nothing");
+                }
+            }
         }
-        _ => {
-            println!("Nothing");
-        }
+    }
+
+    pub fn run_sample_process(output_buffer: TextBuffer) {
+        let lsof_proc = MachineProcess {
+            command: "lsof"
+        };
+        lsof_proc.spawn(output_buffer);
     }
 }
