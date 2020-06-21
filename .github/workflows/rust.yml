@@ -17,7 +17,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Get GTK libs
-      run: sudo apt install -y libgtk-3-dev
+      run: sudo apt update && sudo apt install -y libgtk-3-dev
     - name: Build
       run: cargo build --verbose
     - name: Run tests
