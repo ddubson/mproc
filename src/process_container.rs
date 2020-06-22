@@ -1,4 +1,5 @@
-use gtk::{TextView, TextBuffer, TextBufferExt, TextBufferBuilder, ScrolledWindow, ScrolledWindowBuilder, WidgetExt, TextTag, TextTagBuilder, TextTagTable};
+use gtk::{TextView, TextBuffer, TextBufferBuilder, ScrolledWindow, ScrolledWindowBuilder,
+          WidgetExt, TextTag, TextTagBuilder, TextTagTable};
 use glib::clone;
 use gtk::prelude::*;
 
@@ -26,9 +27,9 @@ pub fn create_process_ui_container() -> ProcessUIContainer {
 
     // Listen for text view changes, auto-scroll as text is added.
     text_view.connect_size_allocate(clone!(@weak scrolled_window => move |_,_| {
-            let adj = scrolled_window.get_vadjustment().unwrap();
-            adj.set_value(adj.get_upper() - adj.get_page_size());
-        }));
+        let adj = scrolled_window.get_vadjustment().unwrap();
+        adj.set_value(adj.get_upper() - adj.get_page_size());
+    }));
 
     ProcessUIContainer {
         text_buffer,
