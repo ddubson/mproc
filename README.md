@@ -12,6 +12,9 @@ front-end application and a back-end application while working on a project.
 
 ### Building pre-requisites
 
+- Rust v1.44.0+
+- rustup v1.21.1+
+- GNU make (for building and running)
 - `glib`
     - MacOS: `brew install glib` then `export PKG_CONFIG_PATH="/usr/local/opt/libffi/lib/pkgconfig"`
 - Gtk3
@@ -28,13 +31,20 @@ front-end application and a back-end application while working on a project.
 
 ### Launch locally
 
-MacOS: `cargo run`
+```bash
+# On MacOS
+make run
 
-Windows: `cargo run --target=x86_64-pc-windows-gnu`
-
+# On Windows
+make run-windows
+```
 
 ### Build binary
 
-MacOS: `cargo build`
+```bash
+# On MacOS
+make install
 
-Windows: `cargo build --target=x86_64-pc-windows-gnu`
+# On Windows
+make install-windows
+```

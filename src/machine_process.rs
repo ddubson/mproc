@@ -18,7 +18,7 @@ impl SpawnsProcess for MachineProcess {
             output = Command::new("cmd")
                 .args(&["/C", &self.command])
                 .output()
-                .expect("Unable to spawn process.");
+                .expect("Unable to spawn Windows process.");
         } else {
             output = Command::new(&self.command)
                 .output()
