@@ -1,13 +1,18 @@
 OS_TYPE := unix
-TARGET  := x86_64-apple-darwin
+RUST_TARGET  := x86_64-apple-darwin
 
 ifeq ($(OS),Windows_NT)
-OS_TYPE = windows
-TARGET  = x86_64-pc-windows-gnu
+    OS_TYPE = windows
+    RUST_TARGET  = x86_64-pc-windows-gnu
+else
+    UNAME_S := $(shell uname -s)
+    ifeq ($(UNAME_S),Linux)
+    RUST_TARGET = x86_64-unknown-linux-gnu
+    endif
 endif
 
 define execute_cargo
-cargo ${1} --target=$(TARGET)
+cargo ${1} --target=$(RUST_TARGET)
 endef
 
 define ensure_unix_program_exists
