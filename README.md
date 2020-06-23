@@ -32,19 +32,11 @@ front-end application and a back-end application while working on a project.
 ### Launch locally
 
 ```bash
-# On MacOS
 make run
-
-# On Windows
-make run-windows
 ```
 
 ### Build binary
 
 ```bash
-# On MacOS
 make install
-
-# On Windows
-make install-windows
 ```

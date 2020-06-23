@@ -1,13 +1,21 @@
-WIN_X86_64_TARGET = x86_64-pc-windows-gnu
+TARGET := x86_64-apple-darwin
 
-run:
-	cargo run
+ifeq ($(OS),Windows_NT)
+TARGET = x86_64-pc-windows-gnu
+endif
 
-run-windows:
-	cargo run --target=$(WIN_X86_64_TARGET)
+define execute_cargo
+cargo ${1} --target=$(TARGET)
+endef
 
 install:
-	cargo install
+	$(call execute_cargo,$@ --path .)
 
-install-windows:
-	cargo install --path . --target=$(WIN_X86_64_TARGET)
+build:
+	$(call execute_cargo,$@)
+
+run:
+	$(call execute_cargo,$@)
+
+test:
+	$(call execute_cargo,$@)
