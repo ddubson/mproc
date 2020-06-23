@@ -15,7 +15,7 @@ command -v ${1} >/dev/null 2>&1 || { echo >&2 "Program '${1}' is not installed!"
 endef
 
 define ensure_windows_program_exists
-where /q ${1} || ECHO "Program '${1}' is not installed!" && EXIT /B
+where /q ${1} || ECHO "Program '${1}' is not installed!" && exit /F
 endef
 
 define ensure_program_exists
