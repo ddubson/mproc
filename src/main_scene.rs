@@ -1,9 +1,10 @@
-use gtk::{Application, ApplicationWindow, ButtonBuilder,
-          BoxBuilder, Orientation, WidgetExt, ButtonExt,
-          ContainerExt, GtkWindowExt};
-use glib::clone;
 use crate::process_container::ProcessUIContainer;
-use crate::{process_container, machine_process};
+use crate::{machine_process, process_container};
+use glib::clone;
+use gtk::{
+    Application, ApplicationWindow, BoxBuilder, ButtonBuilder, ButtonExt, ContainerExt,
+    GtkWindowExt, Orientation, WidgetExt,
+};
 
 struct WindowConfiguration {
     title: &'static str,
@@ -19,16 +20,12 @@ const STD_WINDOW_CONFIG: WindowConfiguration = WindowConfiguration {
 
 pub fn on_window_activate(app: &Application) {
     let window = ApplicationWindow::new(app);
-    let button = ButtonBuilder::new()
-        .label("Exit mproc!")
-        .build();
+    let button = ButtonBuilder::new().label("Exit mproc!").build();
     button.connect_clicked(clone!(@weak window => move |_| window.destroy()));
 
     let process_container: ProcessUIContainer = process_container::create_process_ui_container();
 
-    let box_container = BoxBuilder::new()
-        .orientation(Orientation::Vertical)
-        .build();
+    let box_container = BoxBuilder::new().orientation(Orientation::Vertical).build();
     box_container.add(&process_container.scrolled_window);
     box_container.add(&button);
 

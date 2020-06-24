@@ -18,6 +18,8 @@ jobs:
     - uses: actions/checkout@v2
     - name: Get GTK libs
       run: sudo apt update && sudo apt install -y libgtk-3-dev make
+    - name: FormatStyle
+      run: make fmt_ci
     - name: Build
       run: make build
     - name: Run tests

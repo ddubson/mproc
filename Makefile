@@ -35,6 +35,12 @@ ensure_programs_installed:
 install: ensure_programs_installed
 	$(call execute_cargo,$@ --path .)
 
+fmt:
+	cargo fmt
+
+fmt_ci:
+	cargo fmt -- --check
+
 build:
 	$(call execute_cargo,$@)
 
@@ -43,3 +49,6 @@ run:
 
 test:
 	$(call execute_cargo,$@)
+
+ship-it: install fmt test build
+	echo "Ready to ship."

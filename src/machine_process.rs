@@ -1,5 +1,5 @@
-use std::process::{Command, Output};
 use gtk::{TextBuffer, TextBufferExt};
+use std::process::{Command, Output};
 
 pub struct MachineProcess {
     command: &'static str,

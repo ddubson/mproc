@@ -1,7 +1,9 @@
-use gtk::{TextView, TextBuffer, TextBufferBuilder, ScrolledWindow, ScrolledWindowBuilder,
-          WidgetExt, TextTag, TextTagBuilder, TextTagTable};
 use glib::clone;
 use gtk::prelude::*;
+use gtk::{
+    ScrolledWindow, ScrolledWindowBuilder, TextBuffer, TextBufferBuilder, TextTag, TextTagBuilder,
+    TextTagTable, TextView, WidgetExt,
+};
 
 pub struct ProcessUIContainer {
     pub text_buffer: TextBuffer,
@@ -15,9 +17,7 @@ pub fn create_process_ui_container() -> ProcessUIContainer {
     let tag_table: TextTagTable = TextTagTable::new();
     tag_table.add(&background_tag);
     tag_table.add(&foreground_tag);
-    let text_buffer: TextBuffer = TextBufferBuilder::new()
-        .tag_table(&tag_table)
-        .build();
+    let text_buffer: TextBuffer = TextBufferBuilder::new().tag_table(&tag_table).build();
     let text_view: TextView = TextView::new_with_buffer(&text_buffer);
     let scrolled_window: ScrolledWindow = ScrolledWindowBuilder::new()
         .min_content_height(400)
