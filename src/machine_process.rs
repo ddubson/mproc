@@ -1,5 +1,7 @@
 use gtk::{TextBuffer, TextBufferExt};
-use std::process::{Command, Output};
+use std::process::{Command, Stdio};
+use std::sync::Arc;
+use std::{process, thread};
 
 pub struct MachineProcess {
     command: &'static str,
@@ -12,29 +14,54 @@ pub trait SpawnsProcess {
 
 impl SpawnsProcess for MachineProcess {
     fn spawn(&self, output_buffer: TextBuffer) {
-        let output: Output;
+        // Create a channel to pass between threads
+        let (thread_sender, thread_receiver) = glib::MainContext::channel(glib::PRIORITY_DEFAULT);
 
-        if cfg!(windows) {
-            output = Command::new("cmd")
-                .args(&["/C", &self.command])
-                .output()
-                .expect("Unable to spawn Windows process.");
-        } else {
-            output = Command::new(&self.command)
-                .output()
-                .expect("Unable to spawn process.");
-        }
+        // Create an atomic reference of the command to be run
+        let cmd = Arc::new(self.command.clone());
 
-        match std::str::from_utf8(&output.stdout) {
-            Ok(x) => {
-                let text_buffer = output_buffer;
-                // Display the output of command in GUI
-                text_buffer.insert(&mut text_buffer.get_end_iter(), x);
+        // Spawn a new thread to run the user command on
+        thread::spawn(move || {
+            let spawned_process: process::Child;
+
+            if cfg!(windows) {
+                spawned_process = Command::new("cmd")
+                    .stdout(Stdio::piped())
+                    .args(&["/C", *cmd])
+                    .spawn()
+                    .expect("Unable to spawn Windows process");
+            } else {
+                spawned_process = Command::new(*cmd)
+                    .stdout(Stdio::piped())
+                    .spawn()
+                    .expect("Unable to spawn process");
             }
-            _ => {
-                println!("Nothing");
+
+            let process_output: process::Output = spawned_process
+                .wait_with_output()
+                .expect("Unable to capture standard output of process");
+
+            match std::str::from_utf8(&process_output.stdout) {
+                Ok(x) => {
+                    // Emit the std output data back to the main thread
+                    thread_sender
+                        .send(x.to_string())
+                        .expect("Unable to write standard output to view.");
+                }
+                _ => {
+                    println!("Nothing");
+                }
             }
-        }
+        });
+
+        // Receive spawned process standard output text
+        let buffer = output_buffer.clone();
+
+        // Listen for standard output data from the command thread
+        thread_receiver.attach(None, move |msg| {
+            buffer.insert(&mut buffer.get_end_iter(), msg.as_str());
+            glib::Continue(true)
+        });
     }
 }
 

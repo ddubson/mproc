@@ -44,3 +44,7 @@ make run
 ```bash
 make install
 ```
+
+### Footnotes and References
+
+- [GTK3 and threads](https://coaxion.net/blog/2019/02/mpsc-channel-api-for-painless-usage-of-threads-with-gtk-in-rust/)
