@@ -22,6 +22,7 @@ pub fn create_process_ui_container() -> ProcessUIContainer {
     let scrolled_window: ScrolledWindow = ScrolledWindowBuilder::new()
         .min_content_height(400)
         .min_content_width(600)
+        .vexpand(true)
         .child(&text_view)
         .build();
 

@@ -25,7 +25,10 @@ pub fn on_window_activate(app: &Application) {
 
     let process_container: ProcessUIContainer = process_container::create_process_ui_container();
 
-    let box_container = BoxBuilder::new().orientation(Orientation::Vertical).build();
+    let box_container = BoxBuilder::new()
+        .orientation(Orientation::Vertical)
+        .margin(25)
+        .build();
     box_container.add(&process_container.scrolled_window);
     box_container.add(&button);
 
