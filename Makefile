@@ -29,6 +29,7 @@ endef
 
 ensure_programs_installed:
 	$(call ensure_program_exists,rustup)
+	$(call ensure_program_exists,rustfmt)
 	$(call ensure_program_exists,rustc)
 	$(call ensure_program_exists,cargo)
 

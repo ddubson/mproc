@@ -14,6 +14,7 @@ front-end application and a back-end application while working on a project.
 
 - Rust v1.44.0+
 - rustup v1.21.1+
+- rustfmt (via `rustup component add rustfmt`)
 - GNU make (for building and running)
 - `glib`
     - MacOS: `brew install glib` then `export PKG_CONFIG_PATH="/usr/local/opt/libffi/lib/pkgconfig"`
