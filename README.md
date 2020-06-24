@@ -12,23 +12,26 @@ front-end application and a back-end application while working on a project.
 
 ### Building pre-requisites
 
-- Rust v1.44.0+
-- rustup v1.21.1+
-- rustfmt (via `rustup component add rustfmt`)
-- GNU make (for building and running)
-- `glib`
-    - MacOS: `brew install glib` then `export PKG_CONFIG_PATH="/usr/local/opt/libffi/lib/pkgconfig"`
-- Gtk3
-    - MacOS: `brew install gtk+3`
-    - Windows:
-      - Install msys2
-      - Within msys2, run:
-        - `pacman -S mingw-w64-x86_64-gtk3`
-        - `pacman -S mingw-w64-x86_64-toolchain`
-      - Add the following vars to local system envs:
-        - `GTK_LIB_DIR` -> usually `C:\msys64\mingw64\lib`
-        - Update `Path` with `C:\msys64\mingw64\bin`
-      - Add target `rustup target add x86_64-pc-windows-gnu`
+#### MacOS
+
+|Requirement|How-to-Install|
+|---|---|
+|Homebrew|[Installation](https://brew.sh/)|
+|Rust 1.44+|[Installation / Getting Started](https://www.rust-lang.org/learn/get-started)|
+|rustup 1.21.1+|After installing Rust, run `rustup update`|
+|rustfmt|After installing Rust, run `rustup component add rustfmt`|
+|GNU make|Run `brew install make`|
+|GTK+3 (Graphics Toolkit)|Run `brew install gtk+3`, `export PKG_CONFIG_PATH="/usr/local/opt/libffi/lib/pkgconfig`|
+
+#### Windows
+
+|Requirement|How-to-Install|
+|---|---|
+|Rust 1.44+|[Installation / Getting Started](https://www.rust-lang.org/learn/get-started)|
+|rustup 1.21.1+|After installing Rust, run `rustup update`|
+|rustfmt|After installing Rust, run `rustup component add rustfmt`|
+|GNU make|[Install msys2](https://www.msys2.org/)|
+|GTK+3 (Graphics Toolkit)|[GTK+3 on Windows](docs/GTK3_Windows.md)|
 
 ### Launch locally
 
@@ -36,7 +39,7 @@ front-end application and a back-end application while working on a project.
 make run
 ```
 
-### Build binary
+### Building native binary
 
 ```bash
 make install
