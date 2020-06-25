@@ -52,7 +52,10 @@ impl SpawnsProcess for MachineProcess {
 
         // Listen for standard output data from the command thread
         thread_receiver.attach(None, move |msg| {
-            buffer.insert(&mut buffer.get_end_iter(), format!("{}{}", &msg.as_str(), "\n").as_str());
+            buffer.insert(
+                &mut buffer.get_end_iter(),
+                format!("{}{}", &msg.as_str(), "\n").as_str(),
+            );
             glib::Continue(true)
         });
     }
@@ -60,7 +63,10 @@ impl SpawnsProcess for MachineProcess {
 
 pub fn run_sample_process(output_buffer: TextBuffer) {
     if cfg!(windows) {
-        MachineProcess { command: "dir" }.spawn(output_buffer);
+        MachineProcess {
+            command: "systeminfo",
+        }
+        .spawn(output_buffer);
     } else {
         MachineProcess { command: "lsof" }.spawn(output_buffer);
     }
