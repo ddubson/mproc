@@ -1,4 +1,5 @@
 use gtk::{TextBuffer, TextBufferExt};
+use std::io::{BufRead, BufReader};
 use std::process::{Command, Stdio};
 use std::sync::Arc;
 use std::{process, thread};
@@ -22,7 +23,7 @@ impl SpawnsProcess for MachineProcess {
 
         // Spawn a new thread to run the user command on
         thread::spawn(move || {
-            let spawned_process: process::Child;
+            let mut spawned_process: process::Child;
 
             if cfg!(windows) {
                 spawned_process = Command::new("cmd")
@@ -37,19 +38,11 @@ impl SpawnsProcess for MachineProcess {
                     .expect("Unable to spawn process");
             }
 
-            let process_output: process::Output = spawned_process
-                .wait_with_output()
-                .expect("Unable to capture standard output of process");
-
-            match std::str::from_utf8(&process_output.stdout) {
-                Ok(x) => {
-                    // Emit the std output data back to the main thread
+            if let Some(ref mut stdout) = spawned_process.stdout {
+                for line in BufReader::new(stdout).lines() {
                     thread_sender
-                        .send(x.to_string())
+                        .send(line.expect("Unable to read stdout line"))
                         .expect("Unable to write standard output to view.");
-                }
-                _ => {
-                    println!("Nothing");
                 }
             }
         });
@@ -59,7 +52,7 @@ impl SpawnsProcess for MachineProcess {
 
         // Listen for standard output data from the command thread
         thread_receiver.attach(None, move |msg| {
-            buffer.insert(&mut buffer.get_end_iter(), msg.as_str());
+            buffer.insert(&mut buffer.get_end_iter(), format!("{}{}", &msg.as_str(), "\n").as_str());
             glib::Continue(true)
         });
     }
