@@ -1,10 +1,9 @@
-use crate::process_container::ProcessUIContainer;
-use crate::{machine_process, process_container};
 use glib::clone;
-use gtk::{
-    Application, ApplicationWindow, BoxBuilder, ButtonBuilder, ButtonExt, ContainerExt,
-    GtkWindowExt, Orientation, WidgetExt,
-};
+use gtk::{Application, ApplicationWindow, BoxBuilder, ButtonBuilder, ButtonExt, ContainerExt, GtkWindowExt, Orientation, WidgetExt};
+
+use crate::{machine_process, process_container};
+use crate::command_loader::Command;
+use crate::process_container::ProcessUIContainer;
 
 struct WindowConfiguration {
     title: &'static str,
@@ -18,7 +17,7 @@ const STD_WINDOW_CONFIG: WindowConfiguration = WindowConfiguration {
     width: 1200,
 };
 
-pub fn on_window_activate(app: &Application) {
+pub fn on_window_activate(app: &Application, defaultCommands: &Vec<Command>) {
     let window = ApplicationWindow::new(app);
     let button = ButtonBuilder::new().label("Exit mproc!").build();
     button.connect_clicked(clone!(@weak window => move |_| window.destroy()));
@@ -37,5 +36,5 @@ pub fn on_window_activate(app: &Application) {
     window.set_default_size(STD_WINDOW_CONFIG.width, STD_WINDOW_CONFIG.height);
     window.show_all();
 
-    machine_process::run_sample_process(process_container.text_buffer)
+    machine_process::run_sample_process(process_container.text_buffer, defaultCommands)
 }

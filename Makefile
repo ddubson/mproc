@@ -40,10 +40,10 @@ install: ensure_programs_installed
 	$(call execute_cargo,$@,--path .)
 
 fmt:
-	cargo fmt
+	$(call execute_cargo,$@)
 
 fmt_ci:
-	cargo fmt -- --check
+	$(call execute_cargo,$@ -- --check)
 
 build:
 	$(call execute_cargo,$@)

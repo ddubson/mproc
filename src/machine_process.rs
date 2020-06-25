@@ -3,6 +3,7 @@ use std::io::{BufRead, BufReader};
 use std::process::{Command, Stdio};
 use std::sync::Arc;
 use std::{process, thread};
+use crate::command_loader;
 
 pub struct MachineProcess {
     command: &'static str,
@@ -61,13 +62,9 @@ impl SpawnsProcess for MachineProcess {
     }
 }
 
-pub fn run_sample_process(output_buffer: TextBuffer) {
-    if cfg!(windows) {
-        MachineProcess {
-            command: "systeminfo",
-        }
-        .spawn(output_buffer);
-    } else {
-        MachineProcess { command: "lsof" }.spawn(output_buffer);
-    }
+pub fn run_sample_process(output_buffer: TextBuffer, commands: &Vec<command_loader::Command>) {
+    commands.iter().map(|command| {
+        MachineProcess { command: &command.run.as_str() }
+            .spawn(output_buffer);
+    }).collect()
 }
