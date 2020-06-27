@@ -1,70 +1,69 @@
+use crate::command_loader;
+use crate::command_loader::MprocCommand;
 use gtk::{TextBuffer, TextBufferExt};
+use std::fs::read_to_string;
 use std::io::{BufRead, BufReader};
 use std::process::{Command, Stdio};
 use std::sync::Arc;
 use std::{process, thread};
-use crate::command_loader;
 
-pub struct MachineProcess {
-    command: &'static str,
-}
+pub fn spawn(mproc_command: MprocCommand, output_buffer: TextBuffer) {
+    // Create a channel to pass between threads
+    let (thread_sender, thread_receiver) = glib::MainContext::channel(glib::PRIORITY_DEFAULT);
 
-pub trait SpawnsProcess {
-    //FIXME output buffer should be generic, not tied to GTK
-    fn spawn(&self, output_buffer: TextBuffer);
-}
+    // Create an atomic reference of the command to be run
+    let cmd = Arc::new(mproc_command.run);
 
-impl SpawnsProcess for MachineProcess {
-    fn spawn(&self, output_buffer: TextBuffer) {
-        // Create a channel to pass between threads
-        let (thread_sender, thread_receiver) = glib::MainContext::channel(glib::PRIORITY_DEFAULT);
+    // Spawn a new thread to run the user command on
+    thread::spawn(move || {
+        let mut spawned_process: process::Child;
 
-        // Create an atomic reference of the command to be run
-        let cmd = Arc::new(self.command.clone());
+        if cfg!(windows) {
+            spawned_process = Command::new("cmd")
+                .stdout(Stdio::piped())
+                .args(&["/C", (*cmd).clone().as_str()])
+                .spawn()
+                .expect("Unable to spawn Windows process");
+        } else {
+            spawned_process = Command::new((*cmd).clone())
+                .stdout(Stdio::piped())
+                .spawn()
+                .expect("Unable to spawn process");
+        }
 
-        // Spawn a new thread to run the user command on
-        thread::spawn(move || {
-            let mut spawned_process: process::Child;
-
-            if cfg!(windows) {
-                spawned_process = Command::new("cmd")
-                    .stdout(Stdio::piped())
-                    .args(&["/C", *cmd])
-                    .spawn()
-                    .expect("Unable to spawn Windows process");
-            } else {
-                spawned_process = Command::new(*cmd)
-                    .stdout(Stdio::piped())
-                    .spawn()
-                    .expect("Unable to spawn process");
+        if let Some(ref mut stdout) = spawned_process.stdout {
+            for line in BufReader::new(stdout).lines() {
+                thread_sender
+                    .send(line.expect("Unable to read stdout line"))
+                    .expect("Unable to write standard output to view.");
             }
+        }
+    });
 
-            if let Some(ref mut stdout) = spawned_process.stdout {
-                for line in BufReader::new(stdout).lines() {
-                    thread_sender
-                        .send(line.expect("Unable to read stdout line"))
-                        .expect("Unable to write standard output to view.");
-                }
-            }
-        });
+    // Receive spawned process standard output text
+    let buffer = output_buffer.clone();
 
-        // Receive spawned process standard output text
-        let buffer = output_buffer.clone();
-
-        // Listen for standard output data from the command thread
-        thread_receiver.attach(None, move |msg| {
-            buffer.insert(
-                &mut buffer.get_end_iter(),
-                format!("{}{}", &msg.as_str(), "\n").as_str(),
-            );
-            glib::Continue(true)
-        });
-    }
+    // Listen for standard output data from the command thread
+    thread_receiver.attach(None, move |msg| {
+        buffer.insert(
+            &mut buffer.get_end_iter(),
+            format!("{}{}", &msg.as_str(), "\n").as_str(),
+        );
+        glib::Continue(true)
+    });
 }
 
-pub fn run_sample_process(output_buffer: TextBuffer, commands: &Vec<command_loader::Command>) {
-    commands.iter().map(|command| {
-        MachineProcess { command: &command.run.as_str() }
-            .spawn(output_buffer);
-    }).collect()
+pub fn run_sample_process(output_buffer: TextBuffer, args: &Vec<String>) {
+    let commands_file_path = &args.get(1).expect("Please provide a path to CommandFile!");
+
+    let contents =
+        read_to_string(commands_file_path).expect("Something went wrong reading the file.");
+
+    let commands = command_loader::get_commands(&contents).expect("Unable to read commands!");
+
+    let first_command = commands
+        .first()
+        .expect("Can't find the first command in Yaml")
+        .clone();
+    spawn(first_command, output_buffer);
 }
