@@ -25,7 +25,17 @@ pub fn spawn(mproc_command: MprocCommand, output_buffer: TextBuffer) {
                 .spawn()
                 .expect("Unable to spawn Windows process");
         } else {
-            spawned_process = Command::new((*cmd).clone())
+            let commands = (*cmd).clone()
+                .split_whitespace()
+                .map(|v| String::from(v))
+                .collect::<Vec<String>>();
+            let command: &String = commands.first().expect(
+                "Not given a valid command!"
+            );
+            let args: &[String] = &commands[1..];
+
+            spawned_process = Command::new(command)
+                .args(args)
                 .stdout(Stdio::piped())
                 .spawn()
                 .expect("Unable to spawn process");
