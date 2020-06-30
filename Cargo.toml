@@ -10,4 +10,5 @@ edition = "2018"
 gtk = "0.8.1"
 glib = "0.9.3"
 gio = "0.8.1"
-yaml-rust = "0.4.4"
+serde = { version = "1.0", features = ["derive"] }
+serde_yaml = "0.8"

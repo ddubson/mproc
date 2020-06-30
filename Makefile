@@ -18,6 +18,10 @@ define execute_cargo
 cargo ${1} --target=$(RUST_OPERATING_TARGET) ${2}
 endef
 
+define execute_cargo_no_target
+cargo ${1}
+endef
+
 define ensure_unix_program_exists
 command -v ${1} >/dev/null 2>&1 || { echo >&2 "Program '${1}' is not installed!"; exit 1; }
 endef
@@ -40,10 +44,10 @@ install: ensure_programs_installed
 	$(call execute_cargo,$@,--path .)
 
 fmt:
-	cargo fmt
+	$(call execute_cargo_no_target,$@)
 
 fmt_ci:
-	cargo fmt -- --check
+	$(call execute_cargo_no_target,fmt -- --check)
 
 build:
 	$(call execute_cargo,$@)
