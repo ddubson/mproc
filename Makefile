@@ -15,7 +15,7 @@ else
 endif
 
 define execute_cargo
-cargo ${1} --target=$(RUST_OPERATING_TARGET)
+cargo ${1} --target=$(RUST_OPERATING_TARGET) ${2}
 endef
 
 define ensure_unix_program_exists
@@ -37,7 +37,7 @@ ensure_programs_installed:
 	$(call ensure_program_exists,cargo)
 
 install: ensure_programs_installed
-	$(call execute_cargo,$@ --path .)
+	$(call execute_cargo,$@,--path .)
 
 fmt:
 	cargo fmt
@@ -49,7 +49,7 @@ build:
 	$(call execute_cargo,$@)
 
 run:
-	$(call execute_cargo,$@)
+	$(call execute_cargo,$@,test-data/.mproc.yml)
 
 test:
 	$(call execute_cargo,$@)
