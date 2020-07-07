@@ -4,6 +4,8 @@ RUST_WINDOWS_TARGET		=x86_64-pc-windows-gnu
 RUST_LINUX_TARGET		=x86_64-unknown-linux-gnu
 RUST_OPERATING_TARGET  	:=$(RUST_MACOS_TARGET)
 
+export PKG_CONFIG_ALLOW_CROSS = 1
+
 ifeq ($(OS),Windows_NT)
     OS_TYPE = windows
     RUST_OPERATING_TARGET = $(RUST_WINDOWS_TARGET)
