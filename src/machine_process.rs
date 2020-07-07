@@ -62,7 +62,7 @@ pub fn spawn(mproc_command: MprocCommand, output_buffer: TextBuffer) {
     });
 }
 
-pub fn run_sample_process(output_buffer: TextBuffer, args: &Vec<String>) {
+pub fn spawn_process(output_buffer: TextBuffer, args: &Vec<String>) {
     let commands_file_path = &args.get(1).expect("Please provide a path to CommandFile!");
 
     let contents =

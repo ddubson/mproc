@@ -1,8 +1,8 @@
 use glib::clone;
 use gtk::prelude::*;
 use gtk::{
-    ScrolledWindow, ScrolledWindowBuilder, TextBuffer, TextBufferBuilder, TextTag, TextTagBuilder,
-    TextTagTable, TextView, TextViewBuilder, WidgetExt,
+    ScrolledWindow, ScrolledWindowBuilder, TextBuffer, TextBufferBuilder, TextView,
+    TextViewBuilder, WidgetExt,
 };
 
 pub struct ProcessUIContainer {
@@ -12,12 +12,7 @@ pub struct ProcessUIContainer {
 }
 
 pub fn create_process_ui_container() -> ProcessUIContainer {
-    let background_tag: TextTag = TextTagBuilder::new().background("black").build();
-    let foreground_tag: TextTag = TextTagBuilder::new().background("white").build();
-    let tag_table: TextTagTable = TextTagTable::new();
-    tag_table.add(&background_tag);
-    tag_table.add(&foreground_tag);
-    let text_buffer: TextBuffer = TextBufferBuilder::new().tag_table(&tag_table).build();
+    let text_buffer: TextBuffer = TextBufferBuilder::new().build();
     let text_view: TextView = TextViewBuilder::new().buffer(&text_buffer).build();
     let scrolled_window: ScrolledWindow = ScrolledWindowBuilder::new()
         .min_content_height(400)
