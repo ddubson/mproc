@@ -2,6 +2,7 @@ extern crate serde_yaml;
 
 use serde::Deserialize;
 use std::fmt;
+use std::fs::read_to_string;
 
 #[derive(Clone, Debug, Deserialize)]
 pub struct MprocCommand {
@@ -24,4 +25,18 @@ pub fn get_commands(file_contents: &str) -> Result<Vec<MprocCommand>, String> {
     serde_yaml::from_str(&file_contents)
         .and_then(|data: CommandFile| Ok(data.commands))
         .map_err(|error| error.to_string())
+}
+
+pub fn extract_first_command(args: &Vec<String>) -> MprocCommand {
+    let commands_file_path = &args.get(1).expect("Please provide a path to CommandFile!");
+
+    let contents =
+        read_to_string(commands_file_path).expect("Something went wrong reading the file.");
+
+    let commands = get_commands(&contents).expect("Unable to read commands!");
+
+    commands
+        .first()
+        .expect("Can't find the first command in Yaml")
+        .clone()
 }

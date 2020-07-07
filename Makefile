@@ -4,15 +4,18 @@ RUST_WINDOWS_TARGET		=x86_64-pc-windows-gnu
 RUST_LINUX_TARGET		=x86_64-unknown-linux-gnu
 RUST_OPERATING_TARGET  	:=$(RUST_MACOS_TARGET)
 
+TEST_MPROC_CONFIG_FILE  :=test-data/.mproc.yml
+
 export PKG_CONFIG_ALLOW_CROSS = 1
 
 ifeq ($(OS),Windows_NT)
     OS_TYPE = windows
     RUST_OPERATING_TARGET = $(RUST_WINDOWS_TARGET)
+    TEST_MPROC_CONFIG_FILE = test-data/.mproc.win.yml
 else
     UNAME_S := $(shell uname -s)
     ifeq ($(UNAME_S),Linux)
-    RUST_OPERATING_TARGET = $(RUST_LINUX_TARGET)
+    RUST_OPERATING_TARGET  = $(RUST_LINUX_TARGET)
     endif
 endif
 
@@ -55,7 +58,7 @@ build:
 	$(call execute_cargo,$@)
 
 run:
-	$(call execute_cargo,$@,test-data/.mproc.yml)
+	$(call execute_cargo,$@,${TEST_MPROC_CONFIG_FILE})
 
 test:
 	$(call execute_cargo,$@)

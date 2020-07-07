@@ -1,4 +1,4 @@
 # This is a sample yaml file used for development purposes only
 commands:
-  - name: All processes and ports
-    run: lsof
+  - name: SystemInfo
+    run: systeminfo

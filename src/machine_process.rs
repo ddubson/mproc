@@ -1,7 +1,5 @@
-use crate::command_loader;
 use crate::command_loader::MprocCommand;
 use gtk::{TextBuffer, TextBufferExt};
-use std::fs::read_to_string;
 use std::io::{BufRead, BufReader};
 use std::process::{Command, Stdio};
 use std::sync::Arc;
@@ -60,19 +58,4 @@ pub fn spawn(mproc_command: MprocCommand, output_buffer: TextBuffer) {
         );
         glib::Continue(true)
     });
-}
-
-pub fn spawn_process(output_buffer: TextBuffer, args: &Vec<String>) {
-    let commands_file_path = &args.get(1).expect("Please provide a path to CommandFile!");
-
-    let contents =
-        read_to_string(commands_file_path).expect("Something went wrong reading the file.");
-
-    let commands = command_loader::get_commands(&contents).expect("Unable to read commands!");
-
-    let first_command = commands
-        .first()
-        .expect("Can't find the first command in Yaml")
-        .clone();
-    spawn(first_command, output_buffer);
 }

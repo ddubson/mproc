@@ -1,9 +1,10 @@
 use glib::clone;
 use gtk::{
     Application, ApplicationWindow, Box, BoxBuilder, ButtonBoxBuilder, ButtonBuilder, ButtonExt,
-    ContainerExt, GtkWindowExt, Orientation, WidgetExt,
+    ContainerExt, GtkWindowExt, LabelBuilder, Orientation, WidgetExt,
 };
 
+use crate::command_loader::extract_first_command;
 use crate::process_container::ProcessUIContainer;
 use crate::{machine_process, process_container};
 
@@ -20,15 +21,19 @@ const STD_WINDOW_CONFIG: WindowConfiguration = WindowConfiguration {
 };
 
 fn on_application_loading(main_box_container: &Box, args: &Vec<String>) {
+    let first_command = extract_first_command(&args);
+
     let process_container: ProcessUIContainer = process_container::create_process_ui_container();
+    let process_label = LabelBuilder::new().label(&first_command.name).build();
     let process_box = BoxBuilder::new()
         .orientation(Orientation::Vertical)
         .margin(25)
         .build();
     process_box.add(&process_container.scrolled_window);
+    main_box_container.add(&process_label);
     main_box_container.add(&process_box);
 
-    machine_process::spawn_process(process_container.text_buffer, args);
+    machine_process::spawn(first_command, process_container.text_buffer);
 }
 
 pub fn on_window_activate(app: &Application, args: &Vec<String>) {
