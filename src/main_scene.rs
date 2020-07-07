@@ -22,7 +22,7 @@ const STD_WINDOW_CONFIG: WindowConfiguration = WindowConfiguration {
 pub fn on_window_activate(app: &Application, args: &Vec<String>) {
     let window = ApplicationWindow::new(app);
     let button = ButtonBuilder::new().label("Exit mproc!").build();
-    button.connect_clicked(clone!(@weak window => move |_| window.destroy()));
+    button.connect_clicked(clone!(@weak window => move |_| window.close()));
 
     let process_container: ProcessUIContainer = process_container::create_process_ui_container();
 
