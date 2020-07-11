@@ -20,13 +20,15 @@ fn on_application_loading(main_box_container: &Box, args: &Vec<String>) {
         .build();
     process_box.add(&process_container.scrolled_window);
     notebook_of_processes.add(&process_box);
+
+    let tab_label = LabelBuilder::new().label(&first_command.name).build();
     notebook_of_processes.set_tab_label(
         &process_box,
-        Some(&LabelBuilder::new().label(&first_command.name).build()),
+        Some(&tab_label),
     );
     main_box_container.add(&notebook_of_processes);
 
-    machine_process::spawn(first_command, process_container.text_buffer);
+    machine_process::spawn(first_command, process_container.text_buffer, tab_label);
 }
 
 pub fn on_window_activate(app: &Application, args: &Vec<String>) {
