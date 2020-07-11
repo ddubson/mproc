@@ -7,6 +7,7 @@ mod command_loader;
 mod machine_process;
 mod main_scene;
 mod process_container;
+mod ui;
 
 fn main() {
     let args = args().collect::<Vec<_>>().clone();
