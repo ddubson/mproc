@@ -6,19 +6,8 @@ use gtk::{
 use crate::command_loader::extract_first_command;
 use crate::process_container::ProcessUIContainer;
 use crate::ui::nav_controls::create_bottom_nav_controls;
+use crate::ui::view_settings::STD_WINDOW_CONFIG;
 use crate::{machine_process, process_container};
-
-struct WindowConfiguration {
-    title: &'static str,
-    height: i32,
-    width: i32,
-}
-
-const STD_WINDOW_CONFIG: WindowConfiguration = WindowConfiguration {
-    title: "mproc",
-    height: 800,
-    width: 1200,
-};
 
 fn on_application_loading(main_box_container: &Box, args: &Vec<String>) {
     let first_command = extract_first_command(&args);
