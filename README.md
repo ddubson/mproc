@@ -23,6 +23,16 @@ front-end application and a back-end application while working on a project.
 |GNU make|Run `brew install make`|
 |GTK+3 (Graphics Toolkit)|Run `brew install gtk+3`, `export PKG_CONFIG_PATH="/usr/local/opt/libffi/lib/pkgconfig`|
 
+#### Debian Linux
+
+|Requirement|How-to-Install|
+|---|---|
+|Rust 1.44+|[Installation / Getting Started](https://www.rust-lang.org/learn/get-started)|
+|rustup 1.21.1+|After installing Rust, run `rustup update`|
+|rustfmt|After installing Rust, run `rustup component add rustfmt`|
+|GNU make|Installed by default|
+|GTK+3 (Graphics Toolkit)|Run `sudo apt install -y libgtk-3-dev`|
+
 #### Windows
 
 |Requirement|How-to-Install|
