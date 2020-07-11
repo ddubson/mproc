@@ -2,11 +2,14 @@
 
 ![Rust](https://github.com/ddubson/mproc/workflows/Rust/badge.svg)
 
-mproc is a GUI-based GTK3 application written in Rust, and is aimed to help developers manage their processes while developing
-a project locally on their dev systems.
+mproc is a GUI-based cross-platform GTK3 application written in Rust, and is aimed to help developers manage their processes while developing
+a project locally on their dev machines.
 
 The common use case is for a developer to use mproc to monitor the logging and health status of a 
 front-end application and a back-end application while working on a project.
+
+mproc requires a configuration file `.mproc.yml` to be located in the root of your project. The schema for mproc's yaml configuration files will be published
+soon, but for now, take a look at `test-data` directory for example yaml configurations.
 
 ## Developing mproc
 
@@ -30,7 +33,7 @@ front-end application and a back-end application while working on a project.
 |Rust 1.44+|[Installation / Getting Started](https://www.rust-lang.org/learn/get-started)|
 |rustup 1.21.1+|After installing Rust, run `rustup update`|
 |rustfmt|After installing Rust, run `rustup component add rustfmt`|
-|GNU make|Installed by default|
+|GNU make|Run `sudo apt install -y make`|
 |GTK+3 (Graphics Toolkit)|Run `sudo apt install -y libgtk-3-dev`|
 
 #### Windows
@@ -45,6 +48,8 @@ front-end application and a back-end application while working on a project.
 
 ### Launch locally
 
+Launches mproc with a test `.mproc.yml` configuration
+
 ```bash
 make run
 ```
@@ -54,6 +59,8 @@ make run
 ```bash
 make install
 ```
+
+`mproc` is now installed and available on your PATH.
 
 ### Footnotes and References
 
