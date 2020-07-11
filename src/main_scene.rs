@@ -1,6 +1,6 @@
 use gtk::{
     Application, ApplicationWindow, Box, BoxBuilder, ContainerExt, GtkWindowExt, LabelBuilder,
-    Orientation, WidgetExt,
+    NotebookBuilder, NotebookExt, Orientation, WidgetExt,
 };
 
 use crate::command_loader::extract_first_command;
@@ -22,16 +22,21 @@ const STD_WINDOW_CONFIG: WindowConfiguration = WindowConfiguration {
 
 fn on_application_loading(main_box_container: &Box, args: &Vec<String>) {
     let first_command = extract_first_command(&args);
+    //TODO set label &first_command.name
+    let notebook_of_processes = NotebookBuilder::new().show_tabs(true).build();
 
     let process_container: ProcessUIContainer = process_container::create_process_ui_container();
-    let process_label = LabelBuilder::new().label(&first_command.name).build();
     let process_box = BoxBuilder::new()
         .orientation(Orientation::Vertical)
         .margin(25)
         .build();
     process_box.add(&process_container.scrolled_window);
-    main_box_container.add(&process_label);
-    main_box_container.add(&process_box);
+    notebook_of_processes.add(&process_box);
+    notebook_of_processes.set_tab_label(
+        &process_box,
+        Some(&LabelBuilder::new().label(&first_command.name).build()),
+    );
+    main_box_container.add(&notebook_of_processes);
 
     machine_process::spawn(first_command, process_container.text_buffer);
 }
