@@ -22,10 +22,7 @@ fn on_application_loading(main_box_container: &Box, args: &Vec<String>) {
     notebook_of_processes.add(&process_box);
 
     let tab_label = LabelBuilder::new().label(&first_command.name).build();
-    notebook_of_processes.set_tab_label(
-        &process_box,
-        Some(&tab_label),
-    );
+    notebook_of_processes.set_tab_label(&process_box, Some(&tab_label));
     main_box_container.add(&notebook_of_processes);
 
     machine_process::spawn(first_command, process_container.text_buffer, tab_label);

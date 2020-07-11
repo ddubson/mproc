@@ -1,5 +1,5 @@
 use crate::command_loader::MprocCommand;
-use gtk::{TextBuffer, TextBufferExt, Label, LabelExt};
+use gtk::{Label, LabelExt, TextBuffer, TextBufferExt};
 use std::io::{BufRead, BufReader};
 use std::process::{Command, Stdio};
 use std::sync::Arc;
@@ -39,7 +39,9 @@ pub fn spawn(mproc_command: MprocCommand, output_buffer: TextBuffer, tab_label: 
                 .expect("Unable to spawn process");
         }
 
-        pid_send.send(spawned_process.id()).expect("Unable to send PID for newly spawned process.");
+        pid_send
+            .send(spawned_process.id())
+            .expect("Unable to send PID for newly spawned process.");
 
         if let Some(ref mut stdout) = spawned_process.stdout {
             for line in BufReader::new(stdout).lines() {
