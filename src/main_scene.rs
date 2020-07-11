@@ -4,17 +4,16 @@ use gtk::{
 };
 
 use crate::command_loader::extract_first_command;
-use crate::process_container::ProcessUIContainer;
+use crate::machine_process;
 use crate::ui::nav_controls::create_bottom_nav_controls;
+use crate::ui::mproc_process_container::MprocProcessContainer;
 use crate::ui::view_settings::STD_WINDOW_CONFIG;
-use crate::{machine_process, process_container};
 
 fn on_application_loading(main_box_container: &Box, args: &Vec<String>) {
     let first_command = extract_first_command(&args);
-    //TODO set label &first_command.name
     let notebook_of_processes = NotebookBuilder::new().show_tabs(true).build();
 
-    let process_container: ProcessUIContainer = process_container::create_process_ui_container();
+    let process_container: MprocProcessContainer = MprocProcessContainer::new();
     let process_box = BoxBuilder::new()
         .orientation(Orientation::Vertical)
         .margin(25)
