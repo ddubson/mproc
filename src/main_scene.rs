@@ -5,8 +5,8 @@ use gtk::{
 
 use crate::command_loader::extract_first_command;
 use crate::machine_process;
-use crate::ui::nav_controls::create_bottom_nav_controls;
 use crate::ui::mproc_process_container::MprocProcessContainer;
+use crate::ui::nav_controls::create_bottom_nav_controls;
 use crate::ui::view_settings::STD_WINDOW_CONFIG;
 
 fn on_application_loading(main_box_container: &Box, args: &Vec<String>) {
