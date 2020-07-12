@@ -28,7 +28,11 @@ pub fn get_commands(file_contents: &str) -> Result<Vec<MprocCommand>, String> {
 }
 
 pub fn extract_first_command(args: &Vec<String>) -> MprocCommand {
-    let commands_file_path = &args.get(1).expect("Please provide a path to CommandFile!");
+    let default = Box::new(String::from(".mproc.yml"));
+    let commands_file_path = &args
+        .get(1)
+        .or(Some(&default))
+        .expect("Unable to find mproc yml config (.mproc.yml)");
 
     let contents =
         read_to_string(commands_file_path).expect("Something went wrong reading the file.");

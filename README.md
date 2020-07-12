@@ -11,6 +11,12 @@ front-end application and a back-end application while working on a project.
 mproc requires a configuration file `.mproc.yml` to be located in the root of your project. The schema for mproc's yaml configuration files will be published
 soon, but for now, take a look at `test-data` directory for example yaml configurations.
 
+## Usage
+
+```
+mproc [path-to-mproc-config]
+```
+
 ## Developing mproc
 
 ### Building pre-requisites
