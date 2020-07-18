@@ -1,11 +1,14 @@
-use crate::command_loader::MprocCommand;
-use gtk::{Label, LabelExt, TextBuffer, TextBufferExt};
 use std::io::{BufRead, BufReader};
 use std::process::{Command, Stdio};
 use std::sync::Arc;
 use std::{process, thread};
 
-pub fn spawn(mproc_command: MprocCommand, output_buffer: TextBuffer, tab_label: Label) {
+use gtk::{LabelExt, TextBufferExt};
+
+use crate::command_loader::MprocCommand;
+use crate::ui::mproc_process_container::MprocProcessContainer;
+
+pub fn spawn_process(proc_container: MprocProcessContainer, mproc_command: MprocCommand) {
     // Create a channel to pass between threads
     let (stdout_send, stdout_recv) = glib::MainContext::channel(glib::PRIORITY_DEFAULT);
     let (pid_send, pid_recv) = glib::MainContext::channel(glib::PRIORITY_DEFAULT);
@@ -53,8 +56,9 @@ pub fn spawn(mproc_command: MprocCommand, output_buffer: TextBuffer, tab_label: 
     });
 
     // Receive spawned process standard output text
-    let buffer = output_buffer.clone();
-    let tab_label_c = tab_label.clone();
+    let buffer = proc_container.text_buffer.clone();
+    let tab_label_c = proc_container.tab_label.clone();
+    let command_label = mproc_command.name.clone();
 
     // Listen for standard output data from the command thread
     stdout_recv.attach(None, move |msg| {
@@ -67,8 +71,7 @@ pub fn spawn(mproc_command: MprocCommand, output_buffer: TextBuffer, tab_label: 
     });
 
     pid_recv.attach(None, move |pid| {
-        let new_label = format!("{} ({})", tab_label_c.get_label(), pid);
-        tab_label_c.set_label(new_label.as_str());
+        tab_label_c.set_label(format!("{} ({})", command_label, pid).as_str());
         glib::Continue(true)
     });
 }

@@ -1,4 +1,6 @@
 /target
 .idea/
-Cargo.lock
 **/*.rs.bk
+
+# Track for binaries (https://github.com/rust-lang/cargo/issues/315)
+!Cargo.lock

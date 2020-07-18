@@ -1,18 +1,20 @@
 use glib::clone;
 use gtk::prelude::*;
 use gtk::{
-    ScrolledWindow, ScrolledWindowBuilder, TextBuffer, TextBufferBuilder, TextView,
+    LabelBuilder, ScrolledWindow, ScrolledWindowBuilder, TextBuffer, TextBufferBuilder, TextView,
     TextViewBuilder, WidgetExt,
 };
 
 pub struct MprocProcessContainer {
-    pub text_buffer: TextBuffer,
-    pub text_view: TextView,
-    pub scrolled_window: ScrolledWindow,
+    pub tab_label: gtk::Label,
+    pub text_buffer: gtk::TextBuffer,
+    pub text_view: gtk::TextView,
+    pub scrolled_window: gtk::ScrolledWindow,
 }
 
 impl MprocProcessContainer {
     pub fn new() -> Self {
+        let tab_label = LabelBuilder::new().label("(New Process)").build();
         let text_buffer: TextBuffer = TextBufferBuilder::new().build();
         let text_view: TextView = TextViewBuilder::new().buffer(&text_buffer).build();
         let scrolled_window: ScrolledWindow = ScrolledWindowBuilder::new()
@@ -29,6 +31,7 @@ impl MprocProcessContainer {
         }));
 
         MprocProcessContainer {
+            tab_label,
             text_buffer,
             text_view,
             scrolled_window,
