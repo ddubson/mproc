@@ -2,3 +2,5 @@
 commands:
   - name: All processes and ports
     run: lsof
+  - name: Docker
+    run: docker ps

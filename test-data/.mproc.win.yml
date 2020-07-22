@@ -2,3 +2,5 @@
 commands:
   - name: SystemInfo
     run: systeminfo
+  - name: Docker
+    run: docker ps

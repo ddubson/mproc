@@ -1,11 +1,11 @@
-use glib::clone;
 use std::env::args;
 
 use gio::prelude::ApplicationExtManual;
 use gio::ApplicationExt;
+use glib::clone;
 use gtk::{Application, ButtonExt, GtkWindowExt};
 
-use crate::command_loader::extract_first_command;
+use crate::command_loader::extract_all_commands;
 use crate::machine_process::spawn_process;
 use crate::ui::main_window::MainWindow;
 
@@ -20,7 +20,7 @@ fn main() {
 
     app.connect_activate(move |app| {
         let main_window: MainWindow = MainWindow::new(app);
-        let first_command = extract_first_command(&args);
+        let commands = extract_all_commands(&args, 4);
 
         let app_window = &main_window.window;
         main_window
@@ -28,8 +28,10 @@ fn main() {
             .exit_button
             .connect_clicked(clone!(@weak app_window => move |_| app_window.close()));
 
-        let mproc_process_container = main_window.create_process_container();
-        spawn_process(mproc_process_container, first_command);
+        commands.iter().for_each(|command| {
+            let mproc_process_container = main_window.create_process_container();
+            spawn_process(mproc_process_container, command.clone())
+        });
 
         main_window.show();
     });

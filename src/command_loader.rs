@@ -27,7 +27,7 @@ pub fn get_commands(file_contents: &str) -> Result<Vec<MprocCommand>, String> {
         .map_err(|error| error.to_string())
 }
 
-pub fn extract_first_command(args: &Vec<String>) -> MprocCommand {
+pub fn extract_all_commands(args: &Vec<String>, limit: usize) -> Vec<MprocCommand> {
     let default = Box::new(String::from(".mproc.yml"));
     let commands_file_path = &args
         .get(1)
@@ -37,10 +37,8 @@ pub fn extract_first_command(args: &Vec<String>) -> MprocCommand {
     let contents =
         read_to_string(commands_file_path).expect("Something went wrong reading the file.");
 
-    let commands = get_commands(&contents).expect("Unable to read commands!");
+    let mut commands = get_commands(&contents).expect("Unable to read commands!");
+    commands.truncate(limit);
 
     commands
-        .first()
-        .expect("Can't find the first command in Yaml")
-        .clone()
 }
