@@ -2,5 +2,9 @@
 commands:
   - name: All processes and ports
     run: lsof
-  - name: Docker
-    run: docker ps
+  - name: Disk info
+    run: df -hl
+  - name: curl google
+    run: curl -X GET google.com
+  - name: ifconfig
+    run: ifconfig
