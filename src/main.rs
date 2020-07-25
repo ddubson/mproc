@@ -6,11 +6,11 @@ use glib::clone;
 use gtk::{Application, ButtonExt, GtkWindowExt};
 
 use crate::command_loader::extract_all_commands;
-use crate::machine_process::spawn_process;
+use crate::spawn_process::spawn_process;
 use crate::ui::main_window::MainWindow;
 
 mod command_loader;
-mod machine_process;
+mod spawn_process;
 mod ui;
 
 fn main() {

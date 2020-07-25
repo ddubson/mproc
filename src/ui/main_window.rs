@@ -1,3 +1,4 @@
+use crate::ui::gtk::gtk_mproc_process_container::GtkMprocProcessContainer;
 use crate::ui::mproc_process_container::MprocProcessContainer;
 use crate::ui::nav_controls::NavControls;
 use crate::ui::view_settings::STD_WINDOW_CONFIG;
@@ -35,8 +36,8 @@ impl MainWindow {
         }
     }
 
-    pub fn create_process_container(&self) -> MprocProcessContainer {
-        let process_container: MprocProcessContainer = MprocProcessContainer::new();
+    pub fn create_process_container(&self) -> Box<GtkMprocProcessContainer> {
+        let process_container = GtkMprocProcessContainer::new();
         let process_box = BoxBuilder::new()
             .orientation(Orientation::Vertical)
             .margin(15)
@@ -46,7 +47,7 @@ impl MainWindow {
         self.process_notebook.add(&process_box);
         self.process_notebook
             .set_tab_label(&process_box, Some(&process_container.tab_label));
-        process_container
+        Box::new(process_container)
     }
 
     pub fn show(&self) {
