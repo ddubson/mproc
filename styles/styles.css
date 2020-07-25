@@ -1,0 +1,13 @@
+body {
+    font-size: 15px;
+}
+
+textview {
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+textview text {
+    background-color: black;
+    color: lightgray;
+}

@@ -72,3 +72,4 @@ make install
 
 - [GTK3 and threads](https://coaxion.net/blog/2019/02/mpsc-channel-api-for-painless-usage-of-threads-with-gtk-in-rust/)
 - [GTK3 callbacks/closures](https://gtk-rs.org/docs-src/tutorial/closures)
+- [CSS + GTK3 examples](https://github.com/gtk-rs/examples/pull/227/files)
