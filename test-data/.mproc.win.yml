@@ -4,3 +4,5 @@ commands:
     run: systeminfo
   - name: ipconfig
     run: ipconfig
+  - name: netstat
+    run: netstat -an
