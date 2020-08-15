@@ -1,3 +1,4 @@
+use log::error;
 use std::fs::File;
 use std::io::{BufRead, BufReader, Seek, SeekFrom};
 
@@ -50,7 +51,7 @@ impl FileWatcher {
                     }
                 }
                 Err(err) => {
-                    println!("{}", err);
+                    error!("{}", err);
                 }
             }
         }

@@ -1,4 +1,5 @@
 use duct::ReaderHandle;
+use log::info;
 use std::cell::RefCell;
 
 pub struct State {
@@ -13,6 +14,7 @@ impl State {
     }
 
     pub fn add_running_process(&self, process: ReaderHandle) {
+        info!("Process(es) {:?} added to state.", process.pids());
         self.running_processes.borrow_mut().push(process);
     }
 
@@ -20,7 +22,7 @@ impl State {
         self.running_processes.borrow().iter().for_each(|process| {
             let pid = process.pids().to_vec();
             process.kill().expect("Unable to kill process");
-            println!("Processes killed: {:?}", pid);
+            info!("Processes killed: {:?}", pid);
         })
     }
 }
