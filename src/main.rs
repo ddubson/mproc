@@ -1,3 +1,4 @@
+mod styles;
 mod file_watcher;
 mod state;
 
@@ -6,13 +7,14 @@ use std::env::args;
 use gio::prelude::ApplicationExtManual;
 use gio::ApplicationExt;
 use glib::clone;
-use gtk::{Application, ButtonExt, CssProviderExt, GtkWindowExt};
+use gtk::{Application, ButtonExt, GtkWindowExt};
 
 use crate::command_loader::extract_all_commands;
 use crate::spawn_process::spawn_process;
 use crate::state::State;
 use crate::ui::main_window::MainWindow;
 use std::rc::Rc;
+use crate::styles::initialize_styles;
 
 mod command_loader;
 mod spawn_process;
@@ -49,18 +51,4 @@ fn main() {
         main_window.show();
     });
     app.run(&vec![]);
-}
-
-fn initialize_styles() {
-    let style = include_str!("../styles/styles.css");
-
-    let provider = gtk::CssProvider::new();
-    provider
-        .load_from_data(style.as_bytes())
-        .expect("Failed to load CSS");
-    gtk::StyleContext::add_provider_for_screen(
-        &gdk::Screen::get_default().expect("Error initializing gtk css provider"),
-        &provider,
-        gtk::STYLE_PROVIDER_PRIORITY_APPLICATION,
-    );
 }
