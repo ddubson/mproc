@@ -1,3 +1,4 @@
+use crate::process_output_handler::ProcessOutputHandler;
 use duct::ReaderHandle;
 use log::info;
 use std::cell::RefCell;
@@ -6,9 +7,14 @@ pub struct AppSettings {
     pub process_limit: usize,
 }
 
+pub struct ProcessHandler {
+    pub reader_handle: ReaderHandle,
+    pub output_handler: ProcessOutputHandler,
+}
+
 pub struct State {
     pub app_settings: AppSettings,
-    pub running_processes: RefCell<Vec<ReaderHandle>>,
+    pub running_processes: RefCell<Vec<ProcessHandler>>,
 }
 
 impl State {
@@ -19,16 +25,25 @@ impl State {
         }
     }
 
-    pub fn add_running_process(&self, process: ReaderHandle) {
-        info!("Process(es) {:?} added to state.", process.pids());
-        self.running_processes.borrow_mut().push(process);
+    pub fn add_process_handler(&self, process_handler: ProcessHandler) {
+        info!(
+            "Process(es) {:?} added to state.",
+            process_handler.reader_handle.pids()
+        );
+        self.running_processes.borrow_mut().push(process_handler);
     }
 
     pub fn kill_all_processes_gracefully(&self) {
-        self.running_processes.borrow().iter().for_each(|process| {
-            let pid = process.pids().to_vec();
-            process.kill().expect("Unable to kill process");
-            info!("Processes killed: {:?}", pid);
-        })
+        self.running_processes
+            .borrow()
+            .iter()
+            .for_each(|process_handler| {
+                let pid = process_handler.reader_handle.pids().to_vec();
+                process_handler
+                    .reader_handle
+                    .kill()
+                    .expect("Unable to kill process");
+                info!("Processes killed: {:?}", pid);
+            })
     }
 }
