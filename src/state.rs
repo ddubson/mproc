@@ -2,13 +2,19 @@ use duct::ReaderHandle;
 use log::info;
 use std::cell::RefCell;
 
+pub struct AppSettings {
+    pub process_limit: usize,
+}
+
 pub struct State {
+    pub app_settings: AppSettings,
     pub running_processes: RefCell<Vec<ReaderHandle>>,
 }
 
 impl State {
     pub fn new() -> Self {
         State {
+            app_settings: AppSettings { process_limit: 4 },
             running_processes: RefCell::new(Vec::new()),
         }
     }

@@ -26,7 +26,7 @@ mod ui;
 fn main() {
     simple_logger::init().unwrap();
     let args = args().collect::<Vec<_>>().clone();
-    let app = Application::new(Some("com.ddubson.basic"), gio::ApplicationFlags::FLAGS_NONE)
+    let app = Application::new(Some("com.ddubson.mproc"), gio::ApplicationFlags::FLAGS_NONE)
         .expect("Initialization failed...");
 
     app.connect_activate(move |app| {
@@ -34,9 +34,9 @@ fn main() {
         initialize_styles();
         let main_window: MainWindow = MainWindow::new(app);
         debug!("Reading .mproc configuration.");
-        let commands = extract_all_commands(&args, 4);
         let state = Rc::new(State::new());
 
+        let commands = extract_all_commands(&args, state.app_settings.process_limit);
         let app_window = &main_window.window;
 
         let state_c = state.clone();
