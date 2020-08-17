@@ -1,5 +1,6 @@
 extern crate serde_yaml;
 
+use crate::settings::DEFAULT_CONFIG_FILE_NAME;
 use serde::Deserialize;
 use std::fmt;
 use std::fs::read_to_string;
@@ -21,14 +22,8 @@ struct CommandFile {
     commands: Vec<MprocCommand>,
 }
 
-pub fn get_commands(file_contents: &str) -> Result<Vec<MprocCommand>, String> {
-    serde_yaml::from_str(&file_contents)
-        .and_then(|data: CommandFile| Ok(data.commands))
-        .map_err(|error| error.to_string())
-}
-
 pub fn extract_all_commands(args: &Vec<String>, limit: usize) -> Vec<MprocCommand> {
-    let default = Box::new(String::from(".mproc.yml"));
+    let default = Box::new(String::from(DEFAULT_CONFIG_FILE_NAME));
     let commands_file_path = &args
         .get(1)
         .or(Some(&default))
@@ -37,8 +32,14 @@ pub fn extract_all_commands(args: &Vec<String>, limit: usize) -> Vec<MprocComman
     let contents =
         read_to_string(commands_file_path).expect("Something went wrong reading the file.");
 
-    let mut commands = get_commands(&contents).expect("Unable to read commands!");
+    let mut commands = read_commands_from_yaml_string(&contents).expect("Unable to read commands!");
     commands.truncate(limit);
 
     commands
+}
+
+fn read_commands_from_yaml_string(yaml_string: &str) -> Result<Vec<MprocCommand>, String> {
+    serde_yaml::from_str(&yaml_string)
+        .and_then(|data: CommandFile| Ok(data.commands))
+        .map_err(|error| error.to_string())
 }

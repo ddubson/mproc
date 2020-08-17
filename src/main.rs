@@ -1,5 +1,6 @@
 mod file_watcher;
 mod process_output_handler;
+mod settings;
 mod state;
 mod styles;
 

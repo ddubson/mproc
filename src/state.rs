@@ -1,11 +1,8 @@
 use crate::process_output_handler::ProcessOutputHandler;
+use crate::settings::AppSettings;
 use duct::ReaderHandle;
 use log::info;
 use std::cell::RefCell;
-
-pub struct AppSettings {
-    pub process_limit: usize,
-}
 
 pub struct ProcessHandler {
     pub reader_handle: ReaderHandle,
@@ -20,7 +17,7 @@ pub struct State {
 impl State {
     pub fn new() -> Self {
         State {
-            app_settings: AppSettings { process_limit: 4 },
+            app_settings: AppSettings::default(),
             running_processes: RefCell::new(Vec::new()),
         }
     }
