@@ -34,7 +34,6 @@ pub fn extract_all_commands(args: &Vec<String>, limit: usize) -> Vec<MprocComman
 
     let mut commands = read_commands_from_yaml_string(&contents).expect("Unable to read commands!");
     commands.truncate(limit);
-
     commands
 }
 
@@ -42,4 +41,18 @@ fn read_commands_from_yaml_string(yaml_string: &str) -> Result<Vec<MprocCommand>
     serde_yaml::from_str(&yaml_string)
         .and_then(|data: CommandFile| Ok(data.commands))
         .map_err(|error| error.to_string())
+}
+
+#[cfg(test)]
+mod tests {
+    use crate::command_loader::read_commands_from_yaml_string;
+
+    #[test]
+    fn read_commands_from_yaml_string_when_provided_a_valid_yaml_returns_valid_repr_of_commands() {
+        let yaml_string = "commands:\n
+             - name: All processes and ports\n
+               run: lsof";
+        let actual_commands_res = read_commands_from_yaml_string(yaml_string);
+        assert_eq!(true, actual_commands_res.is_ok());
+    }
 }
