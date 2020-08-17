@@ -9,8 +9,7 @@ extern crate simple_logger;
 
 use gio::prelude::ApplicationExtManual;
 use gio::ApplicationExt;
-use glib::clone;
-use gtk::{Application, ButtonExt, GtkWindowExt};
+use gtk::{Application, ApplicationWindow, GtkWindowExt};
 use log::{debug, info};
 use std::env::args;
 
@@ -39,16 +38,12 @@ fn main() {
         let state = Rc::new(State::new());
 
         let commands = extract_all_commands(&args, state.app_settings.process_limit);
-        let app_window = &main_window.window;
 
         let state_c = state.clone();
-        main_window
-            .controls
-            .exit_button
-            .connect_clicked(clone!(@weak app_window => move |_| {
-                app_window.close();
-                state_c.kill_all_processes_gracefully();
-            }));
+        main_window.on_exit_button_clicked(move |app_window: &ApplicationWindow| {
+            app_window.close();
+            state_c.kill_all_processes_gracefully();
+        });
 
         let state_c2 = state.clone();
         commands.iter().for_each(|command| {

@@ -2,9 +2,10 @@ use crate::ui::gtk::gtk_mproc_process_container::GtkMprocProcessContainer;
 use crate::ui::mproc_process_container::MprocProcessContainer;
 use crate::ui::nav_controls::NavControls;
 use crate::ui::view_settings::STD_WINDOW_CONFIG;
+use glib::clone;
 use gtk::{
-    Application, ApplicationWindow, BoxBuilder, ContainerExt, GtkWindowExt, NotebookBuilder,
-    NotebookExt, Orientation, WidgetExt,
+    Application, ApplicationWindow, BoxBuilder, ButtonExt, ContainerExt, GtkWindowExt,
+    NotebookBuilder, NotebookExt, Orientation, WidgetExt,
 };
 
 pub struct MainWindow {
@@ -34,6 +35,13 @@ impl MainWindow {
             controls: bottom_nav_controls,
             process_notebook: notebook_of_processes,
         }
+    }
+
+    pub fn on_exit_button_clicked<F: Fn(&ApplicationWindow) + 'static>(&self, f: F) {
+        let app_window = &self.window;
+        self.controls
+            .exit_button
+            .connect_clicked(clone!(@weak app_window => move |_| f(&app_window)));
     }
 
     pub fn create_process_container(&self) -> Box<GtkMprocProcessContainer> {
