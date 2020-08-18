@@ -1,6 +1,7 @@
 use log::error;
 use std::fs::File;
 use std::io::{BufRead, BufReader, Seek, SeekFrom};
+use std::{thread, time};
 
 pub struct FileWatcher {
     pos: u64,
@@ -24,14 +25,15 @@ impl FileWatcher {
         let pos = metadata.len();
         reader.seek(SeekFrom::Start(pos)).unwrap();
         Ok(FileWatcher {
-            pos: pos,
-            reader: reader,
+            pos,
+            reader,
             finish: false,
         })
     }
 
     pub fn watch<F: Fn(String)>(&mut self, on_line_receive: F) {
         loop {
+            thread::sleep(time::Duration::from_millis(50));
             let mut line = String::new();
             let resp = self.reader.read_line(&mut line);
             match resp {
@@ -45,7 +47,6 @@ impl FileWatcher {
                         if self.finish {
                             break;
                         } else {
-                            //self.reopen_if_log_rotated(callback);
                             self.reader.seek(SeekFrom::Start(self.pos)).unwrap();
                         }
                     }
