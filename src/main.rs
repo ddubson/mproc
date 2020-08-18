@@ -25,7 +25,6 @@ mod ui;
 
 fn main() {
     simple_logger::init().unwrap();
-    MprocSession::first_application_run_setup();
 
     let args = args().collect::<Vec<_>>().clone();
     let app = Application::new(Some("com.ddubson.mproc"), gio::ApplicationFlags::FLAGS_NONE)
@@ -38,6 +37,7 @@ fn main() {
         debug!("Reading .mproc configuration.");
         let state = Rc::new(State::new());
         let settings = AppSettings::default();
+        MprocSession::first_application_run_setup(&settings.sessions_directory);
 
         let commands = extract_all_commands(&args, settings.process_limit);
 
