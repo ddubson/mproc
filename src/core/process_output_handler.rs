@@ -1,8 +1,5 @@
 use glib::random_int;
 
-//static DEFAULT_NIX_DIRECTORY: &str = "~/.mproc";
-//static DEFAULT_WINDOWS_DIRECTORY: &str = "~/AppData/Local/Temp/.mproc";
-
 pub struct ProcessOutputHandler {
     pub output_capture_file_name: String,
 }

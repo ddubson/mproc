@@ -4,7 +4,5 @@ commands:
     run: lsof
   - name: Disk info
     run: df -hl
-  - name: curl google
-    run: curl -X GET google.com
   - name: ifconfig
     run: ifconfig

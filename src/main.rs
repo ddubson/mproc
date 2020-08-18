@@ -11,6 +11,7 @@ use log::{debug, info};
 use std::env::args;
 
 use crate::command_loader::extract_all_commands;
+use crate::core::session::MprocSession;
 use crate::core::settings::AppSettings;
 use crate::core::state::State;
 use crate::spawn_process::spawn_process;
@@ -24,6 +25,8 @@ mod ui;
 
 fn main() {
     simple_logger::init().unwrap();
+    MprocSession::first_application_run_setup();
+
     let args = args().collect::<Vec<_>>().clone();
     let app = Application::new(Some("com.ddubson.mproc"), gio::ApplicationFlags::FLAGS_NONE)
         .expect("Initialization failed...");
