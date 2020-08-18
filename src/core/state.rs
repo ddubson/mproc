@@ -1,12 +1,6 @@
-use crate::process_output_handler::ProcessOutputHandler;
-use duct::ReaderHandle;
+use crate::core::process_handler::ProcessHandler;
 use log::{debug, info};
 use std::cell::RefCell;
-
-pub struct ProcessHandler {
-    pub reader_handle: ReaderHandle,
-    pub output_handler: ProcessOutputHandler,
-}
 
 pub struct State {
     pub running_processes: RefCell<Vec<ProcessHandler>>,

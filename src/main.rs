@@ -1,6 +1,5 @@
 mod core;
 mod file_watcher;
-mod process_output_handler;
 
 extern crate log;
 extern crate simple_logger;
