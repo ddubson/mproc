@@ -1,8 +1,6 @@
+mod core;
 mod file_watcher;
 mod process_output_handler;
-mod settings;
-mod state;
-mod styles;
 
 extern crate log;
 extern crate simple_logger;
@@ -14,11 +12,12 @@ use log::{debug, info};
 use std::env::args;
 
 use crate::command_loader::extract_all_commands;
+use crate::core::settings::AppSettings;
+use crate::core::state::State;
 use crate::spawn_process::spawn_process;
-use crate::state::State;
-use crate::styles::initialize_styles;
 use crate::ui::main_window::MainWindow;
 use std::rc::Rc;
+use ui::gtk::styles_loader::initialize_styles;
 
 mod command_loader;
 mod spawn_process;
@@ -30,14 +29,15 @@ fn main() {
     let app = Application::new(Some("com.ddubson.mproc"), gio::ApplicationFlags::FLAGS_NONE)
         .expect("Initialization failed...");
 
-    app.connect_activate(move |app| {
+    app.connect_activate(move |app: &Application| {
         info!("Starting application.");
         initialize_styles();
         let main_window: MainWindow = MainWindow::new(app);
         debug!("Reading .mproc configuration.");
         let state = Rc::new(State::new());
+        let settings = AppSettings::default();
 
-        let commands = extract_all_commands(&args, state.app_settings.process_limit);
+        let commands = extract_all_commands(&args, settings.process_limit);
 
         let state_c = state.clone();
         main_window.on_exit_button_clicked(move |app_window: &ApplicationWindow| {

@@ -1,7 +1,6 @@
 use crate::process_output_handler::ProcessOutputHandler;
-use crate::settings::AppSettings;
 use duct::ReaderHandle;
-use log::info;
+use log::{debug, info};
 use std::cell::RefCell;
 
 pub struct ProcessHandler {
@@ -10,20 +9,18 @@ pub struct ProcessHandler {
 }
 
 pub struct State {
-    pub app_settings: AppSettings,
     pub running_processes: RefCell<Vec<ProcessHandler>>,
 }
 
 impl State {
     pub fn new() -> Self {
         State {
-            app_settings: AppSettings::default(),
             running_processes: RefCell::new(Vec::new()),
         }
     }
 
     pub fn add_process_handler(&self, process_handler: ProcessHandler) {
-        info!(
+        debug!(
             "Process(es) {:?} added to state.",
             process_handler.reader_handle.pids()
         );
@@ -34,7 +31,7 @@ impl State {
         self.running_processes
             .borrow()
             .iter()
-            .for_each(|process_handler| {
+            .for_each(|process_handler: &ProcessHandler| {
                 let pid = process_handler.reader_handle.pids().to_vec();
                 process_handler
                     .reader_handle

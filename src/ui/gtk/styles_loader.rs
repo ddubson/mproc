@@ -1,7 +1,7 @@
 use gtk::CssProviderExt;
 
 pub fn initialize_styles() {
-    let style = include_str!("../styles/styles.css");
+    let style = include_str!("../../../styles/styles.css");
 
     let provider = gtk::CssProvider::new();
     provider

@@ -1,6 +1,6 @@
 extern crate serde_yaml;
 
-use crate::settings::DEFAULT_CONFIG_FILE_NAME;
+use crate::core::settings::DEFAULT_CONFIG_FILE_NAME;
 use serde::Deserialize;
 use std::fmt;
 use std::fs::read_to_string;

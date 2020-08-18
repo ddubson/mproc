@@ -1,9 +1,9 @@
 use std::thread;
 
 use crate::command_loader::MprocCommand;
+use crate::core::state::{ProcessHandler, State};
 use crate::file_watcher::FileWatcher;
 use crate::process_output_handler::ProcessOutputHandler;
-use crate::state::{ProcessHandler, State};
 use crate::ui::mproc_process_container::MprocProcessContainer;
 use duct::{cmd, ReaderHandle};
 use log::debug;
