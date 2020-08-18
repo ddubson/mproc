@@ -57,6 +57,9 @@ fmt_ci:
 build:
 	$(call execute_cargo,$@)
 
+build-rel:
+	$(call execute_cargo,build,--release)
+
 run:
 	$(call execute_cargo,$@,${TEST_MPROC_CONFIG_FILE})
 
