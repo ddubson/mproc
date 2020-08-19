@@ -1,3 +1,8 @@
 site_name: mproc Docs
-theme: readthedocs
 docs_dir: 'mkdocs/docs'
+theme:
+  name: readthedocs
+  hljs_languages:
+    - rust
+    - powershell
+    - bash
