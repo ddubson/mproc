@@ -1,12 +1,15 @@
 # mproc
 
 ![Rust](https://github.com/ddubson/mproc/workflows/Rust/badge.svg)
+[![Documentation Status](https://readthedocs.org/projects/mproc/badge/?version=latest)](https://mproc.readthedocs.io/en/latest/?badge=latest)
 
 mproc is a GUI-based cross-platform GTK3 application written in Rust, and is aimed to help developers 
 manage their processes while developing a project locally on their dev machines.
 
 The common use case is for a developer to use mproc to monitor the logging and health status of a 
 front-end application and a back-end application while working on a project.
+
+[mproc Documentation - Latest](https://mproc.readthedocs.io/en/latest/)
 
 ## Usage
 
