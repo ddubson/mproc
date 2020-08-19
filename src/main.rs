@@ -1,5 +1,4 @@
 mod core;
-mod file_watcher;
 
 extern crate log;
 extern crate simple_logger;
@@ -10,17 +9,15 @@ use gtk::{Application, ApplicationWindow, GtkWindowExt};
 use log::{debug, info};
 use std::env::args;
 
-use crate::command_loader::extract_all_commands;
+use crate::core::command_loader::extract_all_commands;
 use crate::core::session::MprocSession;
 use crate::core::settings::AppSettings;
+use crate::core::spawn_process::spawn_process;
 use crate::core::state::State;
-use crate::spawn_process::spawn_process;
 use crate::ui::main_window::MainWindow;
 use std::rc::Rc;
 use ui::gtk::styles_loader::initialize_styles;
 
-mod command_loader;
-mod spawn_process;
 mod ui;
 
 fn main() {
@@ -45,6 +42,7 @@ fn main() {
         main_window.on_exit_button_clicked(move |app_window: &ApplicationWindow| {
             app_window.close();
             state_c.kill_all_processes_gracefully();
+            info!("mproc stopped. Goodbye!")
         });
 
         let state_c2 = state.clone();

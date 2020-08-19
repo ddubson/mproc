@@ -49,7 +49,7 @@ fn read_commands_from_yaml_string(yaml_string: &str) -> Result<Vec<MprocCommand>
 
 #[cfg(test)]
 mod tests {
-    use crate::command_loader::read_commands_from_yaml_string;
+    use crate::core::command_loader::read_commands_from_yaml_string;
 
     #[test]
     fn read_commands_from_yaml_string_when_provided_a_valid_yaml_returns_valid_repr_of_commands() {

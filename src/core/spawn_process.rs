@@ -1,10 +1,10 @@
 use std::thread;
 
-use crate::command_loader::MprocCommand;
+use crate::core::command_loader::MprocCommand;
+use crate::core::file_watcher::FileWatcher;
 use crate::core::process_handler::ProcessHandler;
 use crate::core::process_output_handler::ProcessOutputHandler;
 use crate::core::state::State;
-use crate::file_watcher::FileWatcher;
 use crate::ui::mproc_process_container::MprocProcessContainer;
 use duct::{cmd, ReaderHandle};
 use log::debug;
