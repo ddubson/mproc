@@ -1,4 +1,4 @@
-# Welcome to mproc Docs
+# mproc Docs
 
 Guide to mproc
 

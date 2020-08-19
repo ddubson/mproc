@@ -1,4 +1,4 @@
-# Developing mproc
+# Developing
 
 ## Setup - Windows
 

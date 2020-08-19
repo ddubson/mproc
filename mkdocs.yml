@@ -1,5 +1,9 @@
 site_name: mproc Docs
 docs_dir: 'mkdocs/docs'
+nav:
+  - 'index.md'
+  - 'structure.md'
+  - 'developing.md'
 theme:
   name: readthedocs
   hljs_languages:
