@@ -27,6 +27,7 @@ impl State {
             .iter()
             .for_each(|process_handler: &ProcessHandler| {
                 let pid = process_handler.reader_handle.pids().to_vec();
+                process_handler.output_handler.remove_output_capture_file();
                 process_handler
                     .reader_handle
                     .kill()

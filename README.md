@@ -10,6 +10,7 @@ The common use case is for a developer to use mproc to monitor the logging and h
 front-end application and a back-end application while working on a project.
 
 [mproc Documentation - Latest](https://mproc.readthedocs.io/en/latest/)
+[mproc public Project Tracker](https://www.pivotaltracker.com/n/projects/2461604)
 
 ## Usage
 

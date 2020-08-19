@@ -1,17 +1,38 @@
-use glib::random_int;
+use log::{debug, error};
+use rand::Rng;
+use std::fs;
 
 pub struct ProcessOutputHandler {
     pub output_capture_file_name: String,
 }
 
 impl ProcessOutputHandler {
-    pub fn new(output_capture_file_name: String) -> Self {
+    pub fn new(sessions_directory: &String) -> Self {
+        let output_capture_file_name =
+            ProcessOutputHandler::assign_output_capture_file(sessions_directory);
         ProcessOutputHandler {
             output_capture_file_name,
         }
     }
 
-    pub fn assign_output_capture_file() -> String {
-        format!("proc-{}.out", random_int())
+    pub fn remove_output_capture_file(&self) -> () {
+        match fs::remove_file(&self.output_capture_file_name) {
+            Ok(()) => debug!(
+                "Removed output capture file at {}",
+                &self.output_capture_file_name
+            ),
+            _ => error!(
+                "Unable to remove output capture file at {}",
+                &self.output_capture_file_name
+            ),
+        }
+    }
+
+    fn assign_output_capture_file(sessions_directory: &String) -> String {
+        format!(
+            "{}/proc-{}.out",
+            sessions_directory,
+            rand::thread_rng().gen::<u32>()
+        )
     }
 }

@@ -4,6 +4,7 @@ use crate::core::command_loader::MprocCommand;
 use crate::core::file_watcher::FileWatcher;
 use crate::core::process_handler::ProcessHandler;
 use crate::core::process_output_handler::ProcessOutputHandler;
+use crate::core::settings::AppSettings;
 use crate::core::state::State;
 use crate::ui::mproc_process_container::MprocProcessContainer;
 use duct::{cmd, ReaderHandle};
@@ -14,6 +15,7 @@ pub fn spawn_process<T: MprocProcessContainer>(
     proc_container: Box<T>,
     mproc_command: MprocCommand,
     state: &State,
+    settings: &AppSettings,
 ) where
     T: Clone + 'static,
 {
@@ -22,9 +24,15 @@ pub fn spawn_process<T: MprocProcessContainer>(
     let (gui_pid_send, gui_pid_recv) = glib::MainContext::channel(glib::PRIORITY_DEFAULT);
 
     // Spawn the command and get a result of either process handle or an error
-    let file_name = ProcessOutputHandler::assign_output_capture_file();
-    let output_file = File::create(&file_name)
-        .expect(format!("Unable to create process output file: {}", &file_name).as_str());
+    let process_output_handler = ProcessOutputHandler::new(&settings.sessions_directory);
+    let output_capture_file = File::create(&process_output_handler.output_capture_file_name)
+        .expect(
+            format!(
+                "Unable to create process output file: {}",
+                &process_output_handler.output_capture_file_name
+            )
+            .as_str(),
+        );
 
     let commands = mproc_command
         .run
@@ -43,26 +51,27 @@ pub fn spawn_process<T: MprocProcessContainer>(
             c.args(args.to_vec());
             Ok(())
         })
-        .stdout_file(output_file)
+        .stdout_file(output_capture_file)
         .reader();
 
     if let Ok(proc_handle) = spawned_process {
         debug!(
             "Process {:?} assigned output capture file {}",
             proc_handle.pids(),
-            &file_name
+            &process_output_handler.output_capture_file_name
         );
         gui_pid_send
             .send(proc_handle.pids().clone())
             .expect("Unable to send GUI PID for newly spawned process.");
 
+        let process_output_file_name = process_output_handler.output_capture_file_name.clone();
         state.add_process_handler(ProcessHandler {
             reader_handle: proc_handle,
-            output_handler: ProcessOutputHandler::new(file_name.clone()),
+            output_handler: process_output_handler,
         });
 
         thread::spawn(move || {
-            let mut output_reader = FileWatcher::register(file_name).unwrap();
+            let mut output_reader = FileWatcher::register(process_output_file_name).unwrap();
 
             output_reader.watch(|line: String| {
                 stdout_send

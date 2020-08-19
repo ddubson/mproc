@@ -3,6 +3,7 @@ use std::process::exit;
 
 pub static DEFAULT_CONFIG_FILE_NAME: &str = ".mproc.yml";
 
+#[derive(Clone)]
 pub struct AppSettings {
     pub process_limit: usize,
     pub mproc_working_directory: String,

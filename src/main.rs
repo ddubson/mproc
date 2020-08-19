@@ -46,9 +46,15 @@ fn main() {
         });
 
         let state_c2 = state.clone();
+        let settings_c = settings.clone();
         commands.iter().for_each(|command| {
             let mproc_process_container = main_window.create_process_container();
-            spawn_process(mproc_process_container, command.clone(), &state_c2);
+            spawn_process(
+                mproc_process_container,
+                command.clone(),
+                &state_c2,
+                &settings_c,
+            );
         });
 
         main_window.show();

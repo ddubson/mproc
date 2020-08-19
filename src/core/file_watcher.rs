@@ -33,7 +33,7 @@ impl FileWatcher {
 
     pub fn watch<F: Fn(String)>(&mut self, on_line_receive: F) {
         loop {
-            thread::sleep(time::Duration::from_millis(50));
+            thread::sleep(time::Duration::from_millis(20));
             let mut line = String::new();
             let resp = self.reader.read_line(&mut line);
             match resp {
