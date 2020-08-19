@@ -51,7 +51,7 @@ mproc [path-to-mproc-config]
 |rustup 1.21.1+|After installing Rust, run `rustup update`|
 |rustfmt|After installing Rust, run `rustup component add rustfmt`|
 |GNU make|[Install msys2](https://www.msys2.org/)|
-|GTK+3 (Graphics Toolkit)|[GTK+3 on Windows](docs/GTK3_Windows.md)|
+|GTK+3 (Graphics Toolkit)|[GTK+3 on Windows](mkdocs/GTK3_Windows.md)|
 
 ### Launch locally
 

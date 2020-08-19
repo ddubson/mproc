@@ -1,0 +1,3 @@
+site_name: mproc Docs
+theme: readthedocs
+docs_dir: 'mkdocs/docs'
