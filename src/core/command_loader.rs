@@ -33,6 +33,20 @@ pub fn extract_all_commands(args: &Vec<String>, limit: usize) -> Vec<MprocComman
     commands
 }
 
+pub fn parse_command_and_args(raw_command_string: &String) -> (String, Vec<String>) {
+    let commands = raw_command_string
+        .clone()
+        .split_whitespace()
+        .map(|v| String::from(v))
+        .collect::<Vec<String>>();
+    let command: String = commands
+        .first()
+        .expect("Not given a valid command!")
+        .clone();
+    let args: Vec<String> = commands[1..].to_vec();
+    (command, args)
+}
+
 fn resolve_config_file_by_args(args: &Vec<String>) -> Box<String> {
     if let Some(path) = args.get(1) {
         Box::new(path.clone())

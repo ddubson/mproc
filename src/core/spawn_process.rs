@@ -1,6 +1,6 @@
 use std::thread;
 
-use crate::core::command_loader::MprocCommand;
+use crate::core::command_loader::{parse_command_and_args, MprocCommand};
 use crate::core::file_watcher::FileWatcher;
 use crate::core::process_handler::ProcessHandler;
 use crate::core::process_output_handler::ProcessOutputHandler;
@@ -34,17 +34,7 @@ pub fn spawn_process<T: MprocProcessContainer>(
             .as_str(),
         );
 
-    let commands = mproc_command
-        .run
-        .clone()
-        .split_whitespace()
-        .map(|v| String::from(v))
-        .collect::<Vec<String>>();
-    let command: String = commands
-        .first()
-        .expect("Not given a valid command!")
-        .clone();
-    let args: Vec<String> = commands[1..].to_vec();
+    let (command, args) = parse_command_and_args(&mproc_command.run);
 
     let spawned_process: Result<ReaderHandle, std::io::Error> = cmd!(command)
         .before_spawn(move |c| {

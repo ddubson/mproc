@@ -1,6 +1,7 @@
 use log::{debug, error};
 use rand::Rng;
 use std::fs;
+use std::path::Path;
 
 pub struct ProcessOutputHandler {
     pub output_capture_file_name: String,
@@ -29,10 +30,10 @@ impl ProcessOutputHandler {
     }
 
     fn assign_output_capture_file(sessions_directory: &String) -> String {
-        format!(
-            "{}/proc-{}.out",
-            sessions_directory,
-            rand::thread_rng().gen::<u32>()
-        )
+        Path::new(sessions_directory)
+            .join(format!("proc-{}.out", rand::thread_rng().gen::<u32>()))
+            .into_os_string()
+            .into_string()
+            .unwrap()
     }
 }

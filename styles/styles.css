@@ -1,10 +1,10 @@
-body {
-    font-size: 15px;
+* {
+    font-size: 13px;
 }
 
 textview {
     border-radius: 5px;
-    font-size: 16px;
+    font-size: 13px;
 }
 
 textview text {
