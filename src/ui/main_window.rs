@@ -17,6 +17,7 @@ pub struct MainWindow {
 impl MainWindow {
     pub fn new(app: &Application) -> MainWindow {
         let main_window = ApplicationWindow::new(app);
+
         let bottom_nav_controls: NavControls = NavControls::new();
 
         let box_container = BoxBuilder::new()
