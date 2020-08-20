@@ -28,11 +28,13 @@ impl State {
             .for_each(|process_handler: &ProcessHandler| {
                 let pid = process_handler.reader_handle.pids().to_vec();
                 process_handler.output_handler.remove_output_capture_file();
-                process_handler
-                    .reader_handle
-                    .kill()
-                    .expect("Unable to kill process");
-                info!("Processes killed: {:?}", pid);
+                if let Err(_) = process_handler.reader_handle.try_wait() {
+                    process_handler
+                        .reader_handle
+                        .kill()
+                        .expect("Unable to kill process");
+                    info!("Processes killed: {:?}", pid);
+                }
             })
     }
 }
