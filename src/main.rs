@@ -6,6 +6,7 @@ use std::env::args;
 use gio::prelude::ApplicationExtManual;
 use gio::ApplicationExt;
 use gtk::Application;
+use simple_logger::SimpleLogger;
 
 use crate::application::MprocApplication;
 
@@ -15,7 +16,7 @@ pub mod application;
 mod ui;
 
 fn main() {
-    simple_logger::init().unwrap();
+    SimpleLogger::new();
     let args = args().collect::<Vec<_>>().clone();
     let app = Application::new(Some("com.ddubson.mproc"), gio::ApplicationFlags::FLAGS_NONE)
         .expect("GTK application initialization failed...");
