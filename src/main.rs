@@ -16,7 +16,10 @@ pub mod application;
 mod ui;
 
 fn main() {
-    SimpleLogger::new();
+    if let Err(_) = SimpleLogger::new().init() {
+        println!("SimpleLogger failed to initialize!");
+    }
+
     let args = args().collect::<Vec<_>>().clone();
     let app = Application::new(Some("com.ddubson.mproc"), gio::ApplicationFlags::FLAGS_NONE)
         .expect("GTK application initialization failed...");
